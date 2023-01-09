@@ -1,0 +1,16 @@
+- label: GETTING STARTED
+  items:
+    - name: Installation
+      link: /docs/getting-started/installation
+    - name: Docker environment
+      link: /docs/getting-started/docker
+- label: ARCHITECTURE
+  items:
+    - name: Kernel
+      link: /docs/architecture/kernel
+    - name: DI/IoC
+      link: /docs/architecture/di
+    - name: Http
+      link: /architecture/http
+    - name: Plugins
+      link: /architecture/plugins

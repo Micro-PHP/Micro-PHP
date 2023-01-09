@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-social@1/bin/bulma-social.min.css">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Installation</title>
+<meta name="generator" content="Jekyll v4.3.1" />
+<meta property="og:title" content="Installation" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/docs/getting-started/installation.html" />
+<meta property="og:url" content="http://localhost:4000/docs/getting-started/installation.html" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Installation" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"Installation","url":"http://localhost:4000/docs/getting-started/installation.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/docs/" class="navbar-item ">Docs</a>
+                    
+                
+                    
+                    <a href="/get-started" class="navbar-item ">Get started</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-medium  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Installation</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    
+
+<aside class="menu">
+
+    <p class="menu-label">GETTING STARTED</p>
+    <ul class="menu-list">
+        
+        <li>
+            <a href="/docs/getting-started/installation" class="">Installation</a>
+            
+        </li>
+        
+        <li>
+            <a href="/docs/getting-started/docker" class="">Docker environment</a>
+            
+        </li>
+            
+    </ul>
+
+    <p class="menu-label">ARCHITECTURE</p>
+    <ul class="menu-list">
+        
+        <li>
+            <a href="/docs/architecture/kernel" class="">Kernel</a>
+            
+        </li>
+        
+        <li>
+            <a href="/docs/architecture/di" class="">DI/IoC</a>
+            
+        </li>
+        
+        <li>
+            <a href="/architecture/http" class="">Http</a>
+            
+        </li>
+        
+        <li>
+            <a href="/architecture/plugins" class="">Plugins</a>
+            
+        </li>
+            
+    </ul>
+
+</aside>
+                </div>
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    
+<div class="content">
+    <h2 id="requirements">Requirements</h2>
+<p>The minimum PHP version must be at least <strong>8.2</strong></p>
+
+<h2 id="get-started">Get started</h2>
+
+<p>It is recommended that you create your first application in a <a href="/docs/getting-started/docker">docker environment</a>.</p>
+
+<p>Or you can create an application via <a href="https://getcomposer.org/">composer</a>.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>composer create-project micro/skeleton <span class="o">{</span>directory<span class="o">}</span> <span class="nt">--remove-vcs</span>
+<span class="nv">$ </span><span class="nb">cd</span> <span class="o">{</span>directory<span class="o">}</span>
+<span class="nv">$ </span>php <span class="nt">-S</span> localhost:10000 <span class="nt">-t</span> public/
+</code></pre></div></div>
+
+<p>Open <code class="language-plaintext highlighter-rouge">http://localhost:10000</code> and you will see HelloWorld page.</p>
+
+<p>There is also support for console utilities.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php bin/console
+</code></pre></div></div>
+
+<h2 id="running-tests">Running Tests</h2>
+
+<p>To run tests, run the following command. By default, phpstan, psalm, phpunit will be runned.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>composer run-script test-all
+</code></pre></div></div>
+
+</div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+        
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+        </div>
+    </div>
+</footer>
+
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts --></body>
+</html>
