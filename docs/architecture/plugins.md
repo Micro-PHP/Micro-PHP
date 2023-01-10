@@ -63,7 +63,7 @@ class AdvancedAdapterPlugin implements AdapterPluginInterface
 }
 ```
 
-После чего добавим еще один плагин, который будет использовать вышеописанные контракты и зарегистрируе
+После чего добавим еще один плагин, который будет использовать вышеописанные контракты и зарегистрируем его в сервисном контейнере.
 
 ```php
 use Micro\Framework\Kernel\Plugin\DependencyProviderInterface;
