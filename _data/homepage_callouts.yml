@@ -1,0 +1,22 @@
+style: is-light
+height: is-medium
+items:
+  - title: Get started
+    icon: fa-space-shuttle
+    description: >
+      Creating a new project is easy.
+      
+      
+      Just start writing code. We have already prepared a working environment especially for you.
+    call_to_action_name: Read more
+    call_to_action_link: /docs/getting-started/installation
+
+  - title: View us on GitHub
+    icon: fa-github
+    icon_brand: true
+    description: >
+      We always welcome enthusiasts who can and want to make quality products.
+      
+      We always welcome your comments, suggestions and pull requests.
+    call_to_action_name: View on GitHub
+    call_to_action_link: https://github.com/Micro-PHP

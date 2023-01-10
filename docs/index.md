@@ -8,6 +8,4 @@ menubar: docs_menu
 
 # Welcome
 
-**Hello world**, this is my first Jekyll blog post.
-
-I hope you like it!
+It is a fast, lightweight and highly flexible web application PHP framework.

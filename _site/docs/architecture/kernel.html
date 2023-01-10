@@ -59,10 +59,6 @@
                     <a href="/docs/" class="navbar-item ">Docs</a>
                     
                 
-                    
-                    <a href="/get-started" class="navbar-item ">Get started</a>
-                    
-                
                 
             </div>
 
@@ -164,94 +160,6 @@
   <li><a href="https://github.com/Micro-PHP/kernel-bootloader-plugin-depends">Подгрузка зависимых плагинов</a></li>
   <li><a href="https://github.com/Micro-PHP/kernel-bootloader-dependency">Предоставление сервисного контейнера в плагин</a></li>
 </ul>
-
-<h2 id="использование-плагинов-в-приложении">Использование плагинов в приложении.</h2>
-
-<p>Т.к. плагин - любой объект, функциональность которого определяется его контрактом (интерфейсом), существует возможность поиска всех плагинов, которые удовлетворяют тому или иному контракту.</p>
-
-<h4 id="пример-использования">Пример использования</h4>
-
-<p>Для начала, давайте создадим контракт плагина:</p>
-
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kd">interface</span> <span class="nc">AdapterPluginInterface</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="n">getName</span><span class="p">():</span> <span class="kt">string</span><span class="p">;</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">():</span> <span class="kt">void</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>И имплементируем вышеописанный контракт.</p>
-
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// First plugin</span>
-<span class="kd">class</span> <span class="nc">DefaultAdapterPlugin</span> <span class="kd">implements</span> <span class="nc">AdapterPluginInterface</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="n">getName</span><span class="p">():</span> <span class="kt">string</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="s1">'default'</span><span class="p">;</span>
-    <span class="p">}</span>
-    
-    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">():</span> <span class="kt">void</span>
-    <span class="p">{</span>
-        <span class="nb">print_r</span><span class="p">(</span><span class="nb">sprintf</span><span class="p">(</span><span class="s1">'Hello, I\'m %s adapter'</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">getName</span><span class="p">()));</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">// Second plugin</span>
-<span class="kd">class</span> <span class="nc">AdvancedAdapterPlugin</span> <span class="kd">implements</span> <span class="nc">AdapterPluginInterface</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="n">getName</span><span class="p">():</span> <span class="kt">string</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="s1">'advanced'</span><span class="p">;</span>
-    <span class="p">}</span>
-    
-    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">():</span> <span class="kt">void</span>
-    <span class="p">{</span>
-        <span class="nb">print_r</span><span class="p">(</span><span class="nb">sprintf</span><span class="p">(</span><span class="s1">'Hello, I\'m %s adapter'</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">getName</span><span class="p">()));</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>После чего добавим еще один плагин, который будет использовать вышеописанные контракты.</p>
-
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">Micro\Framework\Kernel\Plugin\DependencyProviderInterface</span><span class="p">;</span>
-<span class="kn">use</span> <span class="nc">Micro\Component\DependencyInjection\Container</span><span class="p">;</span>
-
-<span class="c1">// Third plugin</span>
-<span class="kd">class</span> <span class="nc">AdapterExecutor</span> <span class="kd">implements</span> <span class="nc">DependencyProviderInterface</span>
-<span class="p">{</span>
-    <span class="k">private</span> <span class="kt">KernelInterface</span> <span class="nv">$kernel</span><span class="p">;</span>
-
-    <span class="k">public</span> <span class="k">function</span> <span class="n">provideDependencies</span><span class="p">(</span><span class="kt">Container</span> <span class="nv">$container</span><span class="p">):</span> <span class="kt">void</span>
-    <span class="p">{</span>
-        <span class="nv">$container</span><span class="o">-&gt;</span><span class="nf">register</span><span class="p">(</span><span class="nc">AdapterExecutor</span><span class="o">::</span><span class="n">class</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span>
-            <span class="kt">KernelInterface</span> <span class="nv">$kernel</span>
-        <span class="p">)</span> <span class="p">{</span>
-            <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">kernel</span> <span class="o">=</span> <span class="nv">$kernel</span><span class="p">;</span>
-            
-            <span class="k">return</span> <span class="nv">$this</span><span class="p">;</span>
-        <span class="p">});</span>
-    <span class="p">}</span>
-    
-    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="cd">/** @var AdapterPluginInterface $plugin */</span>
-        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">kernel</span><span class="o">-&gt;</span><span class="nf">plugins</span><span class="p">(</span><span class="nc">AdapterPluginInterface</span><span class="o">::</span><span class="n">class</span><span class="p">)</span> <span class="k">as</span> <span class="nv">$plugin</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nv">$plugin</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>После чего нам необходимо будет зарегистрировать плагины в ядре и запустить приложение.
-**Если вы используете <a href="/docs/getting-started/installation">micro/skeleton</a>, то просто добавьте string-class в <code class="language-plaintext highlighter-rouge">etc/plugins.php</code> **</p>
-
-<p>После чего плагин <code class="language-plaintext highlighter-rouge">AdapterExecutor</code> можно использовать в других компонентах системы через DI/LoC.</p>
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="nv">$executor</span> <span class="o">=</span> <span class="nv">$container</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="nc">AdapterExecutor</span><span class="o">::</span><span class="n">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">();</span>
-<span class="c1">// Hello, I'm default adapter</span>
-<span class="c1">// Hello, I'm advanced adapter</span>
-</code></pre></div></div>
 
 <h2 id="подробный-пример--инициализации-ядра">Подробный пример  инициализации ядра</h2>
 
