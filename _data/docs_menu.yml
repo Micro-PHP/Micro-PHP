@@ -11,6 +11,6 @@
     - name: DI/IoC
       link: /docs/architecture/di
     - name: Http
-      link: /architecture/http
+      link: /docs/architecture/http
     - name: Plugins
-      link: /architecture/plugins
+      link: /docs/architecture/plugins

@@ -21,17 +21,18 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-social@1/bin/bulma-social.min.css">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Configuring in the Kernel</title>
-<meta name="generator" content="Jekyll v4.3.1" />
-<meta property="og:title" content="Configuring in the Kernel" />
+<title>Kernel usages | Micro-PHP</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Kernel usages" />
 <meta property="og:locale" content="en_US" />
 <link rel="canonical" href="http://localhost:4000/docs/architecture/kernel.html" />
 <meta property="og:url" content="http://localhost:4000/docs/architecture/kernel.html" />
+<meta property="og:site_name" content="Micro-PHP" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Configuring in the Kernel" />
+<meta property="twitter:title" content="Kernel usages" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","headline":"Configuring in the Kernel","url":"http://localhost:4000/docs/architecture/kernel.html"}</script>
+{"@context":"https://schema.org","@type":"WebPage","headline":"Kernel usages","url":"http://localhost:4000/docs/architecture/kernel.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <!-- head scripts --></head>
@@ -41,7 +42,7 @@
     <div class="container">
         <div class="navbar-brand">
             <a href="/" class="navbar-item">
-                
+                Micro-PHP
             </a>
             <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
                 <span aria-hidden="true"></span>
@@ -77,7 +78,7 @@
         <section class="hero  is-medium  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Configuring in the Kernel</h1>
+            <h1 class="title is-2">Kernel usages</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -125,12 +126,12 @@
         </li>
         
         <li>
-            <a href="/architecture/http" class="">Http</a>
+            <a href="/docs/architecture/http" class="">Http</a>
             
         </li>
         
         <li>
-            <a href="/architecture/plugins" class="">Plugins</a>
+            <a href="/docs/architecture/plugins" class="">Plugins</a>
             
         </li>
             
@@ -146,7 +147,206 @@
                     
                     
 <div class="content">
+    <p><a href="https://github.com/Micro-PHP/micro-kernel">Kernel</a> - это главный компонент системы фреймворка. Он отвечает за загрузку плагинов и корректную их работу.</p>
+
+<h2 id="plugins">Plugins</h2>
+<p>Плагин - это абсолютно любой класс, который может быть загружен и использован другими компонентами системы.
+Поведение плагина описывается контакртами (интерфейсами). Подробнее про систему плагинов читайте <a href="/docs/architecture/plugins">здесь</a>.</p>
+
+<h2 id="bootloaders">Bootloaders</h2>
+
+<p>Bootloader - это класс, который позволяет вмешаться в процесс инициализации плагина.
+Фактически, Bootloader является одним из способов внедрения любых побочных служебных компонентов в систему.</p>
+
+<p>Вот несколько примеров его применения:</p>
+<ul>
+  <li><a href="https://github.com/Micro-PHP/kernel-bootloader-configuration">Создание конфигурации плагина</a></li>
+  <li><a href="https://github.com/Micro-PHP/kernel-bootloader-plugin-depends">Подгрузка зависимых плагинов</a></li>
+  <li><a href="https://github.com/Micro-PHP/kernel-bootloader-dependency">Предоставление сервисного контейнера в плагин</a></li>
+</ul>
+
+<h2 id="использование-плагинов-в-приложении">Использование плагинов в приложении.</h2>
+
+<p>Т.к. плагин - любой объект, функциональность которого определяется его контрактом (интерфейсом), существует возможность поиска всех плагинов, которые удовлетворяют тому или иному контракту.</p>
+
+<h4 id="пример-использования">Пример использования</h4>
+
+<p>Для начала, давайте создадим контракт плагина:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kd">interface</span> <span class="nc">AdapterPluginInterface</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">getName</span><span class="p">():</span> <span class="kt">string</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">():</span> <span class="kt">void</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>И имплементируем вышеописанный контракт.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// First plugin</span>
+<span class="kd">class</span> <span class="nc">DefaultAdapterPlugin</span> <span class="kd">implements</span> <span class="nc">AdapterPluginInterface</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">getName</span><span class="p">():</span> <span class="kt">string</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'default'</span><span class="p">;</span>
+    <span class="p">}</span>
     
+    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">():</span> <span class="kt">void</span>
+    <span class="p">{</span>
+        <span class="nb">print_r</span><span class="p">(</span><span class="nb">sprintf</span><span class="p">(</span><span class="s1">'Hello, I\'m %s adapter'</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">getName</span><span class="p">()));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Second plugin</span>
+<span class="kd">class</span> <span class="nc">AdvancedAdapterPlugin</span> <span class="kd">implements</span> <span class="nc">AdapterPluginInterface</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">getName</span><span class="p">():</span> <span class="kt">string</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'advanced'</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">():</span> <span class="kt">void</span>
+    <span class="p">{</span>
+        <span class="nb">print_r</span><span class="p">(</span><span class="nb">sprintf</span><span class="p">(</span><span class="s1">'Hello, I\'m %s adapter'</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">getName</span><span class="p">()));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>После чего добавим еще один плагин, который будет использовать вышеописанные контракты.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">Micro\Framework\Kernel\Plugin\DependencyProviderInterface</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Micro\Component\DependencyInjection\Container</span><span class="p">;</span>
+
+<span class="c1">// Third plugin</span>
+<span class="kd">class</span> <span class="nc">AdapterExecutor</span> <span class="kd">implements</span> <span class="nc">DependencyProviderInterface</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">KernelInterface</span> <span class="nv">$kernel</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">provideDependencies</span><span class="p">(</span><span class="kt">Container</span> <span class="nv">$container</span><span class="p">):</span> <span class="kt">void</span>
+    <span class="p">{</span>
+        <span class="nv">$container</span><span class="o">-&gt;</span><span class="nf">register</span><span class="p">(</span><span class="nc">AdapterExecutor</span><span class="o">::</span><span class="n">class</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span>
+            <span class="kt">KernelInterface</span> <span class="nv">$kernel</span>
+        <span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">kernel</span> <span class="o">=</span> <span class="nv">$kernel</span><span class="p">;</span>
+            
+            <span class="k">return</span> <span class="nv">$this</span><span class="p">;</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="n">execute</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="cd">/** @var AdapterPluginInterface $plugin */</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">kernel</span><span class="o">-&gt;</span><span class="nf">plugins</span><span class="p">(</span><span class="nc">AdapterPluginInterface</span><span class="o">::</span><span class="n">class</span><span class="p">)</span> <span class="k">as</span> <span class="nv">$plugin</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$plugin</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>После чего нам необходимо будет зарегистрировать плагины в ядре и запустить приложение.
+**Если вы используете <a href="/docs/getting-started/installation">micro/skeleton</a>, то просто добавьте string-class в <code class="language-plaintext highlighter-rouge">etc/plugins.php</code> **</p>
+
+<p>После чего плагин <code class="language-plaintext highlighter-rouge">AdapterExecutor</code> можно использовать в других компонентах системы через DI/LoC.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nv">$executor</span> <span class="o">=</span> <span class="nv">$container</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="nc">AdapterExecutor</span><span class="o">::</span><span class="n">class</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">execute</span><span class="p">();</span>
+<span class="c1">// Hello, I'm default adapter</span>
+<span class="c1">// Hello, I'm advanced adapter</span>
+</code></pre></div></div>
+
+<h2 id="подробный-пример--инициализации-ядра">Подробный пример  инициализации ядра</h2>
+
+<p>Наглядный пример подготовки простейшего приложения. Эта информация дана исключительно в обучающих целях.
+Советуем использовать уже готовые инструменты:</p>
+<ul>
+  <li><a href="/docs/getting-started/installation">micro/skeleton</a></li>
+  <li><a href="/docs/getting-started/docker">micro/docker</a></li>
+</ul>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">Micro\Framework\Kernel\Configuration\DefaultApplicationConfiguration</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Micro\Framework\Kernel\Plugin\PluginDependedInterface</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Micro\Framework\Kernel\Plugin\ApplicationPluginInterface</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Micro\Component\DependencyInjection\Container</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Micro\Framework\Kernel\Plugin\PluginBootLoaderInterface</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Micro\Framework\Kernel\KernelBuilder</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Micro\Framework\Kernel\Configuration\ApplicationConfigurationInterface</span><span class="p">;</span>
+
+<span class="kd">interface</span> <span class="nc">DependencyProviderInterface</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">provideDependencies</span><span class="p">(</span><span class="kt">Container</span> <span class="nv">$container</span><span class="p">):</span> <span class="kt">void</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">interface</span> <span class="nc">ConfigurableInterface</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">provideApplicationConfiguration</span><span class="p">(</span><span class="kt">ApplicationConfigurationInterface</span> <span class="nv">$configuration</span><span class="p">):</span> <span class="kt">void</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Create simple plugin</span>
+<span class="n">readonly</span> <span class="kd">class</span> <span class="nc">TestPlugin</span> <span class="kd">implements</span> <span class="nc">DependencyProviderInterface</span><span class="p">,</span> <span class="nc">ConfigurableInterface</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">provideDependencies</span><span class="p">(</span><span class="kt">Container</span> <span class="nv">$container</span><span class="p">):</span> <span class="kt">void</span>
+    <span class="p">{</span>
+        <span class="nb">print_r</span><span class="p">(</span><span class="s1">'Provided DI container'</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="n">provideApplicationConfiguration</span><span class="p">(</span><span class="kt">ApplicationConfigurationInterface</span> <span class="nv">$configuration</span><span class="p">):</span> <span class="kt">void</span>
+    <span class="p">{</span>
+        <span class="nb">print_r</span><span class="p">(</span><span class="nv">$configuration</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="s1">'APP_ENV'</span><span class="p">));</span> <span class="c1">//dev</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">readonly</span> <span class="kd">class</span> <span class="nc">DependencyProviderBootLoader</span> <span class="kd">implements</span> <span class="nc">PluginBootLoaderInterface</span>
+<span class="p">{</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="kt">private</span> <span class="nc">Container</span> <span class="nv">$container</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="n">boot</span><span class="p">(</span><span class="kt">object</span> <span class="nv">$applicationPlugin</span><span class="p">):</span> <span class="kt">void</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nv">$applicationPlugin</span> <span class="k">instanceof</span> <span class="nc">DependencyProviderInterface</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        
+        <span class="nv">$applicationPlugin</span><span class="o">-&gt;</span><span class="nf">provideDependencies</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">container</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">readonly</span> <span class="kd">class</span> <span class="nc">ConfigurationProviderBootLoader</span> <span class="kd">implements</span> <span class="nc">PluginBootLoaderInterface</span>
+<span class="p">{</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="kt">private</span> <span class="nc">ApplicationConfigurationInterface</span> <span class="nv">$configuration</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="n">boot</span><span class="p">(</span><span class="kt">object</span> <span class="nv">$applicationPlugin</span><span class="p">):</span> <span class="kt">void</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nv">$applicationPlugin</span> <span class="k">instanceof</span> <span class="nc">ConfigurableInterface</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        
+        <span class="nv">$applicationPlugin</span><span class="o">-&gt;</span><span class="nf">provideApplicationConfiguration</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">configuration</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="nv">$kernelBuilder</span>  <span class="o">=</span> <span class="k">new</span> <span class="nc">KernelBuilder</span><span class="p">();</span>
+<span class="nv">$container</span>      <span class="o">=</span> <span class="k">new</span> <span class="nc">Container</span><span class="p">();</span>
+<span class="nv">$configuration</span>  <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultApplicationConfiguration</span><span class="p">([</span><span class="s1">'APP_ENV'</span> <span class="o">=&gt;</span> <span class="s1">'dev'</span><span class="p">]);</span>
+<span class="nv">$kernel</span>         <span class="o">=</span> <span class="nv">$kernelBuilder</span>
+    <span class="o">-&gt;</span><span class="nf">setApplicationConfiguration</span><span class="p">(</span><span class="nv">$configuration</span><span class="p">)</span>
+    <span class="o">-&gt;</span><span class="nf">setContainer</span><span class="p">(</span><span class="nv">$container</span><span class="p">)</span>
+    <span class="o">-&gt;</span><span class="nf">setApplicationPlugins</span><span class="p">([</span>
+        <span class="nc">TestPlugin</span><span class="o">::</span><span class="n">class</span>
+    <span class="p">])</span>
+    <span class="o">-&gt;</span><span class="nf">addBootLoaders</span><span class="p">([</span>
+        <span class="k">new</span> <span class="nc">DependencyProviderLoader</span><span class="p">(</span><span class="nv">$container</span><span class="p">),</span>
+        <span class="k">new</span> <span class="nc">ConfigurationProviderBootLoader</span><span class="p">(</span><span class="nv">$configuration</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="o">-&gt;</span><span class="nf">build</span><span class="p">();</span>
+<span class="p">;</span>
+
+<span class="nv">$kernel</span><span class="o">-&gt;</span><span class="nf">run</span><span class="p">();</span>
+</code></pre></div></div>
 
 </div>
                 </div>

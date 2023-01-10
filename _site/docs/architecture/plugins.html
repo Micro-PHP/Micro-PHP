@@ -21,18 +21,18 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-social@1/bin/bulma-social.min.css">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>The Blog Post Title | Micro-PHP</title>
+<title>Plugins | Micro-PHP</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="The Blog Post Title" />
+<meta property="og:title" content="Plugins" />
 <meta property="og:locale" content="en_US" />
-<link rel="canonical" href="http://localhost:4000/docs/" />
-<meta property="og:url" content="http://localhost:4000/docs/" />
+<link rel="canonical" href="http://localhost:4000/docs/architecture/plugins.html" />
+<meta property="og:url" content="http://localhost:4000/docs/architecture/plugins.html" />
 <meta property="og:site_name" content="Micro-PHP" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="The Blog Post Title" />
+<meta property="twitter:title" content="Plugins" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","headline":"The Blog Post Title","url":"http://localhost:4000/docs/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","headline":"Plugins","url":"http://localhost:4000/docs/architecture/plugins.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <!-- head scripts --></head>
@@ -56,7 +56,7 @@
                 
                 
                     
-                    <a href="/docs/" class="navbar-item is-active">Docs</a>
+                    <a href="/docs/" class="navbar-item ">Docs</a>
                     
                 
                     
@@ -78,8 +78,8 @@
         <section class="hero  is-medium  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">The Blog Post Title</h1>
-            <p class="subtitle is-3">The blog post subtitle</p>
+            <h1 class="title is-2">Plugins</h1>
+            <p class="subtitle is-3"></p>
             
         </div>
     </div>
@@ -147,11 +147,20 @@
                     
                     
 <div class="content">
-    <h1 id="welcome">Welcome</h1>
+    <p>Плагин - это абсолютно любой класс, который может быть загружен и использован другими компонентами системы.
+Поведение плагина описывается контакртами (интерфейсами).</p>
 
-<p><strong>Hello world</strong>, this is my first Jekyll blog post.</p>
+<p>## Пример имплементации плагина</p>
 
-<p>I hope you like it!</p>
+<ol>
+  <li>Создадим класс плагина</li>
+</ol>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+<span class="kd">class</span> <span class="nc">My</span>
+
+</code></pre></div></div>
 
 </div>
                 </div>
