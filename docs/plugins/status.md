@@ -28,9 +28,11 @@ menubar: docs_menu
             <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/build.png?b=master" />
         </td>
         <td>
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/quality-score.png?b=master" /> <br />
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/coverage.png?b=master" /> <br />
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/code-intelligence.svg?b=master" /> <br />
+            <a href="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}" >
+                <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/quality-score.png?b=master" /> <br />
+                <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/coverage.png?b=master" /> <br />
+                <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/code-intelligence.svg?b=master" /> <br />
+            </a>
         </td>
         <td>
             <img alt="Installs of the package `{{packege.name}}` today" src="https://img.shields.io/packagist/dd/micro/{{package.name}}?label=today">
