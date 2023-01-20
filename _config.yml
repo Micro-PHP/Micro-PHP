@@ -13,7 +13,7 @@ packages_official:
     github: container-autowire
   -
     name: dependency-injection
-    github: dependency-injection
+    github: lib-dependency-injection
   -
     name: deprecation-supports
     github: deprecation-supports
@@ -34,13 +34,13 @@ packages_official:
     github: http-boot
   -
     name:  plugin-http-core
-    github: http-core
+    github: plugin-http-core
   -
     name:  plugin-http-exceptions
     github: http-exceptions
   -
     name:  plugin-http-exceptions-dev
-    github: http-exceptions-dev
+    github: http-exception-dev
   -
     name:  plugin-http-logger
     github: http-logger
