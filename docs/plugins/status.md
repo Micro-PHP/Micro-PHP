@@ -19,21 +19,24 @@ menubar: docs_menu
     {% for package in site.packages_official %}
         <tr>
             <td>
-                micro/{{ package }}
+                <b>micro/{{ package }}</b>
             </td>
             <td>
-                <p>Stable: <img alt="Packagist Version" src="https://img.shields.io/packagist/v/micro/{{package}}"></p>
-                <p>Pre-release: Pre-release: <img alt="Packagist Version (including pre-releases)" src="https://img.shields.io/packagist/v/micro/{{package}}?include_prereleases"></p>
+                <tr>
+                    <td><b>Stable</b></td> <td> <img alt="Packagist Version" src="https://img.shields.io/packagist/v/micro/{{package}}" /></td>
+                </tr>
+                <tr>
+                    <td><b>Pre-release</b></td> <td> <img alt="Packagist Version (including pre-releases)" src="https://img.shields.io/packagist/v/micro/{{package}}?include_prereleases" /></td>
+                </tr>
             </td>
             <td>
-                <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/build.png?b=master">
+                <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/build.png?b=master" />
             </td>
             <td>
                 <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/quality-score.png?b=master" />
                 <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/coverage.png?b=master" />
                 <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/code-intelligence.svg?b=master" />
             </td>
-            <td>
             <td>
                 <img src="https://img.shields.io/packagist/dm/micro/{{package}}?label=installs" />
             </td>
