@@ -1659,8 +1659,8 @@ a.panel-block:hover, label.panel-block:hover { background-color: whitesmoke; }
   .column.is-offset-2-desktop { margin-left: 16.66666674%; }
   .column.is-3-desktop { flex: none; width: 25%; }
   .column.is-offset-3-desktop { margin-left: 25%; }
-  .column.is-4-desktop { flex: none; width: 33.33333337%; }
-  .column.is-offset-4-desktop { margin-left: 33.33333337%; }
+  .column.is-4-desktop { flex: none; width: 20.33333337%; }
+  .column.is-offset-4-desktop { margin-left: 20.33333337%; }
   .column.is-5-desktop { flex: none; width: 41.66666674%; }
   .column.is-offset-5-desktop { margin-left: 41.66666674%; }
   .column.is-6-desktop { flex: none; width: 50%; }
