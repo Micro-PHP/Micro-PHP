@@ -7,4 +7,6 @@ menubar: docs_menu
 
 | Package      | Latest Version | Build status | Coverage | Quality | Downloads |
 |--------------|----------------|--------------|----------|---------|-----------|
-| Content Cell | [![Latest Version on Packagist][ico-version]][https://packagist.org/packages/micro/kernel]   |              |          |         |
+{% for package in site.packages_official %}
+| micro/{{ package }} | LATEST | DOWNLOADS | COVERAGE | Quality | ![Packagist Downloads](https://img.shields.io/packagist/dm/micro/{{package}}?label=installs) |"
+{% endfor %}

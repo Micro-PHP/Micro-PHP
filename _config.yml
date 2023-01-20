@@ -1,3 +1,34 @@
 #theme: bulma-clean-theme
 remote_theme: chrisrhymes/bulma-clean-theme
 github: [metadata]
+packages_official:
+  - kernel
+  - kernel-app
+  - autowire
+  - dependency-injection
+  - deprecation-supports
+  - kernel-boot-configuration
+  - kernel-boot-dependency
+  - kernel-boot-plugin-depended
+  - plugin-configuration-helper
+  - plugin-http-boot
+  - plugin-http-core
+  - plugin-http-exceptions
+  - plugin-http-exceptions-dev
+  - plugin-http-logger
+  - plugin-http-middleware
+  - plugin-http-pack
+  - plugin-http-router-code
+  - plugin-locator
+  - plugin-logger-core
+  - plugin-logger-monolog
+  - plugin-twig
+  - plugin-console
+  - plugin-doctrine
+  - plugin-dto
+  - plugin-elastic
+  - plugin-event-emitter
+  - plugin-filesystem
+  - plugin-filesystem-local
+  - plugin-filesystem-s3
+  - plugin-uuid
