@@ -19,7 +19,7 @@ menubar: docs_menu
     {% for package in site.packages_official %}
         <tr>
             <td>
-                {{ micro/{{ package }} }}
+                micro/{{ package }}
             </td>
             <td>
                 
@@ -34,7 +34,7 @@ menubar: docs_menu
                 
             </td>
             <td>
-                ![Packagist Downloads](https://img.shields.io/packagist/dm/micro/{{package}}?label=installs)
+                <img src="https://img.shields.io/packagist/dm/micro/{{package}}?label=installs" />
             </td>
         </tr>
 {% endfor %}
