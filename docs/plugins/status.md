@@ -29,12 +29,14 @@ menubar: docs_menu
             </p>
         </td>
         <td>
-            <a href="https://packagist.org/packages/{{package.name}}">
+            <a href="https://packagist.org/packages/{{package.name}}" target="_blank">
                 <img alt="Packagist Version" src="https://img.shields.io/packagist/v/micro/{{package.name}}" />
             </a>
         </td>
         <td>
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/build.png?b=master" />
+            <a href="https://github.com/Micro-PHP/{{package.github}}/actions" target="_blank">
+                <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/build.png?b=master" />
+            </a>
         </td>
         <td>
             <a href="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}" target="_blank">
