@@ -21,9 +21,9 @@
             <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/build.png?b=master" />
         </td>
         <td>
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/quality-score.png?b=master" />
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/coverage.png?b=master" />
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/code-intelligence.svg?b=master" />
+            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/quality-score.png?b=master" /> <br />
+            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/coverage.png?b=master" /> <br />
+            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/code-intelligence.svg?b=master" /> <br />
         </td>
         <td>
             <img src="https://img.shields.io/packagist/dm/micro/{{package}}?label=installs" />
