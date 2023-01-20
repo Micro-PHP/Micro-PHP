@@ -58,7 +58,7 @@ packages_official:
     github: plugin-locator
   -
     name:  plugin-logger-core
-    github: plugin-logger-core
+    github: plugin-logger
 
   -
     name:  plugin-logger-monolog
