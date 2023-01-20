@@ -10,7 +10,11 @@
       link: /docs/architecture/kernel
     - name: DI/IoC
       link: /docs/architecture/di
-    - name: Http
-      link: /docs/architecture/http
-    - name: Plugins
-      link: /docs/architecture/plugins
+#    - name: Http
+#      link: /docs/architecture/http
+#    - name: Plugins
+#      link: /docs/architecture/plugins
+- label: COMPONENTS
+  items:
+    - name: Status list
+      link: /docs/plugins/status

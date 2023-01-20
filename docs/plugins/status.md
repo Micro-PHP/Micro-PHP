@@ -1,3 +1,10 @@
+---
+layout: doc/document
+title: Installation
+show_sidebar: false
+menubar: docs_menu
+---
+
 <table class="responsive-table table">
     <thead>
     <tr>
