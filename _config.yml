@@ -14,9 +14,9 @@ packages_official:
   -
     name: dependency-injection
     github: lib-dependency-injection
-  -
-    name: deprecation-supports
-    github: deprecation-supports
+#  -
+#    name: deprecation-supports
+#    github: deprecation-supports
   -
     name: kernel-boot-configuration
     github: kernel-boot-configuration
