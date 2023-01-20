@@ -12,21 +12,21 @@
     {% for package in site.packages_official %}
     <tr>
         <td>
-            <b>micro/{{ package }}</b>
+            <b>micro/{{ package.name }}</b>
         </td>
         <td>
-            <img alt="Packagist Version" src="https://img.shields.io/packagist/v/micro/{{package}}" />
+            <img alt="Packagist Version" src="https://img.shields.io/packagist/v/micro/{{package.name}}" />
         </td>
         <td>
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/build.png?b=master" />
+            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/build.png?b=master" />
         </td>
         <td>
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/quality-score.png?b=master" /> <br />
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/coverage.png?b=master" /> <br />
-            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/code-intelligence.svg?b=master" /> <br />
+            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/quality-score.png?b=master" /> <br />
+            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/coverage.png?b=master" /> <br />
+            <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/code-intelligence.svg?b=master" /> <br />
         </td>
         <td>
-            <img src="https://img.shields.io/packagist/dm/micro/{{package}}?label=installs" />
+            <img src="https://img.shields.io/packagist/dm/micro/{{package.name}}?label=installs" />
         </td>
     </tr>
     {% endfor %}
