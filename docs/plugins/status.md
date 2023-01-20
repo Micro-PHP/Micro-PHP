@@ -15,14 +15,8 @@
             <b>micro/{{ package }}</b>
         </td>
         <td>
-            <tr>
-                <td><b>Stable</b></td> <td> <img alt="Packagist Version" src="https://img.shields.io/packagist/v/micro/{{package}}" /></td>
-            </tr>
-            <tr>
-                <td><b>Pre-release</b></td> <td> <img alt="Packagist Version (including pre-releases)" src="https://img.shields.io/packagist/v/micro/{{package}}?include_prereleases" /></td>
-            </tr>
+            <img alt="Packagist Version" src="https://img.shields.io/packagist/v/micro/{{package}}" />
         </td>
-
         <td>
             <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package}}/badges/build.png?b=master" />
         </td>
