@@ -1,6 +1,6 @@
 ---
 layout: doc/document
-title: Installation
+title: Framework components status
 show_sidebar: false
 menubar: docs_menu
 ---
