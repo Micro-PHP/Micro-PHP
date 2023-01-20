@@ -3,7 +3,7 @@ remote_theme: chrisrhymes/bulma-clean-theme
 github: [metadata]
 packages_official:
   -
-    name: packagist
+    name: kernel
     github: micro-kernel
   -
     name: kernel-app
