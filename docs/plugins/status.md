@@ -33,9 +33,9 @@ menubar: docs_menu
             <img src="https://scrutinizer-ci.com/g/Micro-PHP/{{package.github}}/badges/code-intelligence.svg?b=master" /> <br />
         </td>
         <td>
-            <img alt="Installs of the package `{{packege.name}}` today" src="https://img.shields.io/packagist/dd/micro/{{package.name}}?label=installs">
-            <img alt="Installs of the package `{{packege.name}} per month" src="https://img.shields.io/packagist/dm/micro/{{package.name}}?label=installs?label=installs" />
-            <img alt="Installs of the package `{{packege.name}}` for all time" src="https://img.shields.io/packagist/dt/micro/{{package.name}}?label=installs">
+            <img alt="Installs of the package `{{packege.name}}` today" src="https://img.shields.io/packagist/dd/micro/{{package.name}}?label=today">
+            <img alt="Installs of the package `{{packege.name}} per month" src="https://img.shields.io/packagist/dm/micro/{{package.name}}?label=per month" />
+            <img alt="Installs of the package `{{packege.name}}` for all time" src="https://img.shields.io/packagist/dt/micro/{{package.name}}?label=all time">
         </td>
     </tr>
     {% endfor %}
