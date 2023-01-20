@@ -19,13 +19,13 @@ packages_official:
 #    github: deprecation-supports
   -
     name: kernel-boot-configuration
-    github: kernel-boot-configuration
+    github: kernel-bootloader-configuration
   -
     name: kernel-boot-dependency
-    github: kernel-boot-dependency
+    github: kernel-bootloader-dependency
   -
     name: kernel-boot-plugin-depended
-    github: kernel-boot-plugin-depended
+    github: kernel-bootloader-plugin-depends
   -
     name:  plugin-configuration-helper
     github: plugin-configuration-helper
