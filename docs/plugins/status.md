@@ -7,6 +7,36 @@ menubar: docs_menu
 
 | Package      | Latest Version | Build status | Coverage | Quality | Downloads |
 |--------------|----------------|--------------|----------|---------|-----------|
-{% for package in site.packages_official %}
-| micro/{{ package }} | LATEST | DOWNLOADS | COVERAGE | Quality | ![Packagist Downloads](https://img.shields.io/packagist/dm/micro/{{package}}?label=installs) |"
+
+<table class="responsive-table table">
+  <thead>
+    <tr>
+      <th scope="col"> Package </th>
+      <th scope="col"> Latest release</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for package in site.packages_official %}
+        <tr>
+            <td>
+                {{ micro/{{ package }} }}
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                ![Packagist Downloads](https://img.shields.io/packagist/dm/micro/{{package}}?label=installs)
+            </td>
+        </tr>
 {% endfor %}
+  </tbody>
+</table>
