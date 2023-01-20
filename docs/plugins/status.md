@@ -29,7 +29,7 @@ menubar: docs_menu
             </p>
         </td>
         <td>
-            <a href="https://packagist.org/packages/{{package.name}}" target="_blank">
+            <a href="https://packagist.org/packages/micro/{{package.name}}" target="_blank">
                 <img alt="Packagist Version" src="https://img.shields.io/packagist/v/micro/{{package.name}}" />
             </a>
         </td>
