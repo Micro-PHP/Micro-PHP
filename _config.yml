@@ -75,9 +75,9 @@ packages_official:
   -
     name:  plugin-dto
     github: plugin-dto
-  -
-    name:  plugin-elastic
-    github: plugin-elastic
+#  -
+#    name:  plugin-elastic
+#    github: plugin-elastic
   -
     name:  plugin-event-emitter
     github: plugin-event-emitter
@@ -90,6 +90,6 @@ packages_official:
   -
     name:  plugin-filesystem-s3
     github: plugin-filesystem-s3
-  -
-    name:  plugin-uuid
-    github: plugin-uuid
+#  -
+#    name:  plugin-uuid
+#    github: plugin-uuid
