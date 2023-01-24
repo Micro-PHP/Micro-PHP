@@ -67,7 +67,7 @@ packages_official:
     name:  plugin-twig
     github: plugin-twig
   - 
-    name: plugin-twig-webpack
+    name: plugin-twig-webpack-encore
     github: webpack-encore-plugin
   -  
     name:  plugin-console
