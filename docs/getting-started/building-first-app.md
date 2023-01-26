@@ -1,6 +1,6 @@
 ---
 layout: doc/document
-title: Framework components status
+title: Пример создания приложения
 show_sidebar: false
 menubar: docs_menu
 ---
