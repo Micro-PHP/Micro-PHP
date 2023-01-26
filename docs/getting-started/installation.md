@@ -15,7 +15,7 @@ It is recommended that you create your first application in a [docker environmen
 Or you can create an application via [composer](https://getcomposer.org/).
 
 ```shell
-$ composer create-project micro/skeleton {directory} --remove-vcs
+$ composer create-project micro/micro {directory} --remove-vcs
 $ cd {directory}
 $ php -S localhost:10000 -t public/
 ```
