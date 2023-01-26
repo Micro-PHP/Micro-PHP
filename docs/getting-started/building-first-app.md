@@ -164,8 +164,8 @@ readonly class PackagistSearch implements PackagistSearchInterface
 }
 ```
 
-Казалось бы, все хорошо, однако packagist может иметь зеркала и нам необходимо иметь возможность его конфигурировать.
-Давайте для этого создадим конфигурационный класс клагина, который будет отвечать за общие его настройки.
+Казалось бы, все хорошо, однако Packagist может иметь зеркала и нам необходимо иметь возможность конфигурировать его HTTP эндпоинт адрес.
+Давайте для этого создадим конфигурационный класс плагина.
 Конфигурация приложения - это key/value хранилище, а значит мы можем определить ключ необходимого нам параметра для получения его значения.
 
 Итак, создаем новый класс в `src/Demo/DemoAppPluginConfiguration.php`
@@ -274,7 +274,7 @@ interface DemoAppFacadeInterface extends PackagistSearchInterface
 }
 ```
 
-Обратите внимание, данный фасад наследуется от `App\Demo\Business\Packagist\PackagistSearchInterface`, однако он может наследовать множесто внутренних интерфейсов. Это позволяет предоставить единую точку входа к функционалу плагина, при этом иметь четкое понимание того, какие задачи он сопосбен решать.
+Обратите внимание, данный фасад имплементирует интерфейс `App\Demo\Business\Packagist\PackagistSearchInterface`, однако он может имплементировать множесто внутренних интерфейсов. Это позволяет предоставить единую точку входа к функционалу плагина, при этом иметь четкое понимание того, какие задачи он сопосбен решать.
 И теперь давайте сделаем реализацию данного контракта `src/Demo/Facade/DemoAppFacade.php`
 
 ```php
@@ -341,27 +341,19 @@ class DemoAppPlugin implements DependencyProviderInterface, ConfigurableInterfac
     }
 }
 ```
-
 Что у нас получилось - мы создали и зарегистрировали в контейнере сервис с контрактом `App\Demo\Facade\DemoAppFacadeInterface`.
+Для того, чтобы ядро MF понимало, что плагин предоставляет в контейнер сервисы, он должен имплементировать интерфейс `Micro\Framework\Kernel\Plugin\DependencyProviderInterface`.
+
 Давайте попробуем пообщаться с нашим сервисом.
 
 ## Cli интерфейс.
 
-Здесь все будет предельно просто. Мы просто возьмем и создадим класс CLI I/O (Input/Output) и в зависимости от переданных параметров через консольную строку будем выдавать ответ в нужном формате.
+Здесь все будет предельно просто. Мы просто возьмем и создадим класс взаимодействия I/O (Input/Output) Сli и в зависимости от переданных параметров через консольную строку будем выдавать ответ в нужном формате.
 Для этого создадим новый класс `src/Demo/Communication/Command/PackagistSearchCommand.php`
 ```php
 <?php
 
 declare(strict_types=1);
-
-/**
- * This file is part of the Micro framework package.
- *
- * (c) Stanislau Komar <head.trackingsoft@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace App\Demo\Communication\Command;
 
@@ -372,9 +364,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @author Stanislau Komar <head.trackingsoft@gmail.com>
- */
 class PackagistSearchCommand extends Command
 {
     public function __construct(private readonly DemoAppFacadeInterface $facade)
@@ -456,10 +445,10 @@ $ make micro c="packagist:search 'micro kernel app'"
 ## HTTP
 Давайте отобразим наши данные в браузере.
 Чтобы сделать это в красивом виде, мы будем использовать
- - В качестве шаблонизатора [Twig](https://twig.symfony.com/).
+ - В качестве шаблонизатора [Twig](https://twig.symfony.com/). Он интегрирован в MF с помощью компонента [micro/plugin-twig](/docs/plugins/micro/plugin-twig)
  - Для стилизации мы будем использовать [Bootstrap](https://getbootstrap.com/)
  - Чтобы связать стили и JS мы будем использовать уже предустановленный плагин [micro/plugin-twig-webpack-encore](https://micro-php.net/docs/plugins/micro/plugin-twig-webpack-encore).
- - Чтобы выполнять сборку frontend - нам понадобится nodejs и менеджер зависимостей (yarn/npm) последних версий.** Но об этом мы расскажем немного позже.
+ - Чтобы выполнять сборку frontend - нам понадобится [nodejs](https://nodejs.org/en/) и менеджер зависимостей (yarn/npm) последних версий.** Но об этом мы расскажем немного позже.
 
 Давайте приступим к созданию контроллера.
 Расположим его в `src/Demo/Communication/Controller/PackagistSearchController.php`
@@ -505,7 +494,7 @@ readonly class PackagistSearchController
 }
 ```
 
-Обратите внимание, в контроллере нам требуются сервисы `App\Demo\Facade\DemoAppFacadeInterface` у которого есть одна задача - генерировать из Twig шаблона контент, в нашем случае, HTML для жальнейшей передачи его в `Response`, а так же, как вы уже узнали, сервис нашего бизнес-слоя `DemoAppFacadeInterface`.
+Обратите внимание, в контроллере нам требуются сервисы `App\Demo\Facade\DemoAppFacadeInterface` у которого есть одна задача - генерировать из Twig шаблона контент, в нашем случае, HTML, а так же, как вы уже узнали, сервис нашего бизнес-слоя `DemoAppFacadeInterface`.
 Осталось сообщить ядру то, что наш плагин является еще и провайдером маршрутов и шаблонов Twig.
 Для этого вернемся в код нашего плагина `src/Demo/DemoAppPlugin.php` и имплементируем в него интерфейсы
   - `Micro\Plugin\Twig\Plugin\TwigTemplatePluginInterface` - контракт, сообщающий о том, откуда и с каким неймспейсом забирать шаблоны.
@@ -575,12 +564,14 @@ class DemoAppPlugin implements DependencyProviderInterface, TwigTemplatePluginIn
   - `TwigTemplatePluginTrait::getTwigNamespace` - Указывает на неймспейс. По умолчанию это shortName класса плагина.
 
 ### Шаблоны
+
 Мы не будем останавливаться в данной статье на работе шаблонизатора, лучше всего об этом расскажет [официальная документация](https://twig.symfony.com/doc/3.x/).
 Но мы [подгтовили для вас готоые шаблоны](https://github.com/Asisyas/microframework-packagist-demo/tree/master/src/Demo/templates), чтобы вы смогли использовать их для демонстрационных целей.
 Просто разместите их в каталог `src/Demo/templates/`
 А [frontend часть]((https://github.com/Asisyas/microframework-packagist-demo/tree/master/assets)) разместите в `assets/`
 
 ### Давайте соберем наш фронт
+
 Для того, чтобы html контент выглядел презентаельно, вышеупомянутые шаблоны подготовлены для работы с CSS фреймворком [Bootstrap](https://getbootstrap.com/)
 И мы пришли к необходимости установки NodeJS.
 
@@ -596,6 +587,7 @@ services:
           - - ./:/app
 ```
 ###### Если вы не используете Docker, то можете просто использовать интерфейс командной строки для работы.
+
 ```shell
 $ yarn install
 ```
@@ -612,9 +604,11 @@ $ npm i bootstrap jqeury --save
 yarn build
 ```
 ## Завершение
+
 Давайте проверим то, как работает наше приложение
 
 ###### Если мы используем Docker
+
 Если наше приложение не запущено, то давайте стартуем его
 
 ```shell
@@ -624,6 +618,7 @@ $ make up
 Откроем в браузере [https://localhost](https://localhost)
 
 ###### Если мы используем локальный php-cli
+
 ```shell
 $ cd public
 $ php -S localhost:8000 
@@ -632,9 +627,11 @@ $ php -S localhost:8000
 
 
 ### Поздравляю, мы собрали первое приложение на MicroPHP.
+
 Надеемся, данный пример раскрыл часть возмодностей MicroPHP и вам понравилось на нем работать.
 
 ## Послесловие
+
   * Исходный код готового приложения можно найти на [GitHub](https://github.com/Asisyas/microframework-packagist-demo)
   * В демонстрационных целях мы показали как можно работать с интерфейсами компонентов MF, однако, мы придерживаемся правила, что каждый плагин должен выполнять только свою функцию: I/O, Business-Layer, View и т.д., однако, вам решать как обустраивать экосистему своего приложения.
   * Спасибо, что используете нас. Это очень мотивирует делать продукт более удобным, качественным и придерживаться высоких стандартов в его разработке.
