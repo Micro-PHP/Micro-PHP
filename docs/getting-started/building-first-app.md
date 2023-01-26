@@ -4,118 +4,229 @@ title: Framework components status
 show_sidebar: false
 menubar: docs_menu
 ---
-
 # Пример создания приложения на Micro Framework.
 
 В данной статье я расскажу вам как создать простое приложение, которое с помощью [Packagist API](https://packagist.org/apidoc#search-packages) выполняет поиск библиотек и выводит результаты в браузер и консоль.
+###### Пример составлен на базе предустановленных компонентах из [micro/micro](https://micro-php/docs/plugins/micro/micro).
 
 ## Установка
 
-###### Минимальная версия php - 8.2
+Есть 2 варианта, которые 
 
 Для начала, давайте установим MF.
-Для этого воспользуемся [composer](https://composer.org).
+Для этого воспользуемся [composer](https://composer.org)
+
+###### Обратите внимание, для запуска MF требуется минмальная версия php 8.2
 
 ```shell
-$ composer require micro/skeleton Demo
+$ composer create-project micro/skeleton Demo --remove-vcs
+```
+Либо можем использовать готовое Docker окружение.
+###### Убедитесь, что у вас установлена свежая версия [Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
+```shell
+$ git clone git@github.com:Micro-PHP/micro-docker.git App
+$ cd App
+$ rm -rf .git/
+$ git init
+$ make build && make up
 ```
 
-У нас появился пустой проект и в нем мы увидим следующую структуру.
+##### После установки, нас особенно будут интересовать следующие каталоги и файлы
 
-`bin/console` - утилита для работы с интерфейсом командной строки
+`src` - исходный код приложения
 
-`etc/plugins.php`  - *здесь можно найти список плагинов, которые включены в проект.
+`public` - точка входа в приложение по протолоку HTTP
 
-`public/index.php` - это точка входа интерфейса HTTP.
+`assets` - исходный код front (css/js/statics)
 
-`.env` - *файл с конфигурацией проекта.
+`bin/console` - утилита для работы с командной строкой
 
-`src` - Исходный код нашего приложения. Давайте загянем внутрь.
+`etc/` - место хранения служебных файлов. Например, `etc/plugins.php` содердит список подключенных плагинов по умолчанию.
 
-## Предлагаемая, но необязательная структура каталогов.
+`.env` (`env.{APP_ENV}`, `env.{APP_ENV}.php`) - - конфигурация нашего приложения.
 
-Сейчас мы находимся внутри каталога `src` и видим схему дирректорий:
+После установки приложения по умолчанию, давайте убедимся, что мы все сделали верно.
 
-`Shared` - этот каталог содержит в себе набор публичных интерфейсов,
-    которые будут реализованы в бизнес-слое нашего приложения.
+#### Если мы устанавливали приложение с помощью docker окружения
+Давайте просто запустил приложение
 
-`Business` Здесь расположен бизнес-слой приложения.
-    Основная его задача - выполнение бизнес логики приложения.
-    Внутри будут находится реализации публичных интерфейсов из каталога `Shared`
+```shell
+$ make up
+```
 
-`View` - Здесь расположены плагины, которые обеспечивают доступ к шаблонам.
-    По умолчанию мы будем использовать [micro/plugin-twig](/docs/plugins/micro/plugin-twig)
+после чего перейдем [https://localhost](https://localhost)
 
-`Communication` - Данный каталог содержит в себе плагины, которые отвечают за I/O.
-     - Для работы с HTTP мы будем использовать [micro/http-pack](/docs/plugins/micro/http-pack)
-     - Для коммуникации через cli, мы используем [micro/plugin-console](/docs/plugins/micro/plugin-console)
+#### Если установка была произведена с помощью `composer`
+```shell
+$ cd public
+$ php -S localhost:8000
+```
 
-`Plugin` - Здесь располагаются мета-плагины,
-    которые обеспечивают подключение зависимых плагинов через интерфейс `Micro\Framework\Kernel\Plugin\PluginDependedInterface`
+И просто перейдите по ссылке [http://localhost:8000](http://localhost:8000)
 
-## Бизнес-слой.
+Если в браузере мы увидели приветственное сообщение - подздравляю, вы все сделали правильно!
 
-Давайте определим то, что будет делать наше приложение. Как я писал выше, мы хотим выполнять простой поиск по репозиторию Packagist
-и выводить результаты в интерфейс консоли и браузер.
-Для этой задачи нам необходимо будет определить интерфейс. Чтож, давайте это сделаем.
+## Первый плагин
 
-В каталоге `src/Shared/Packagist/Search/` создадим необходимый нам интерфейс.
+Для начала, давайте удалим App/Acme плагин т.к. он является демонстрационным и никакой ценности из себя не представляет.
+
+```shell
+$ rm -rf src/Acme
+```
+
+И создадим свой собственный `src/Demo/DemoAppPlugin.php`
+
+```php
+class DemoAppPlugin
+{
+}
+```
+
+После чего включим его в список плагинов для инициализации `etc/plugins.php`.
+
+```php
+<?php
+
+return [
+    // Separate system plugins from appliction plugins.
+    Micro\Plugin\Configuration\Helper\ConfigurationHelperPlugin::class,
+    Micro\Plugin\Console\ConsolePlugin::class,
+    Micro\Plugin\Http\HttpPackPlugin::class,
+    Micro\Plugin\Logger\Monolog\MonologPlugin::class,
+    Micro\Plugin\Doctrine\DoctrinePlugin::class,
+    Micro\Plugin\Twig\TwigPlugin::class,
+    OleksiiBulba\WebpackEncorePlugin\WebpackEncorePlugin::class,
+    
+     //App plugin(s)
+    App\Demo\DemoAppPlugin::class,
+    // App\Acme\AcmePlugin::class <-- remove redundant plugin
+];
+```
+
+## Бизнес-слой
+
+Давайте наделим наше приожение логикой. Для начала, определим интерфейс взаимодейстаия с [API Packagist.org](https://packagist.org/apidoc#search-packages) для поиска.
+Создадим мы его в `src/Demo/Business/Packagist/PackagistSearchInterface.php`
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Shared\Packagist\Search;
+namespace App\Demo\Business\Packagist;
 
 interface PackagistSearchInterface
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function search(string $query): array;
 }
 ```
 
-А так же нам понадобится Facade для доступа к данному сервису.
-Давайте создадим его интерфейс в `src/Shared/Packagist`
+После того как интерфейс готов, имплементируем его логику.
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Shared\Packagist;
+namespace App\Demo\Business\Packagist;
 
-use App\Shared\Packagist\Search\PackagistSearchInterface;
-
-interface PackagistFacadeInterface extends PackagistSearchInterface
-{
-}
-```
-
-Инетрфейс фасада позволяет облегчить понимание того, как работает сервис.
-Фасад может включать в себя множество интерфейсов из которых и будет состоять сервис, 
-который в дальнейшем мы будем передавать в контейнер. Но об этом чуть позже.
-
-### Имплементация бизнес-логики на основе абстракций.
-
-Мы определили инетрфейсы наших сервисов, теперь неплохо было бы заставить их работать.
-Давайте имплементируем наш интерфейс `App\Shared\Packagist\Search\PackagistSearchInterface`
-
-Для этого создадим следующий класс в `App\Business\Packagist\Search\PackagistSearch.php`
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Business\Packagist\Search;
-
-use App\Business\Packagist\PackagistBusinessPluginConfiguration;
-use App\Shared\Packagist\Search\PackagistSearchInterface;
+use App\Demo\DemoAppPluginConfiguration;
 
 readonly class PackagistSearch implements PackagistSearchInterface
 {
     public function __construct(
-        private PackagistBusinessPluginConfiguration $pluginConfiguration
+    ) {
+    }
+
+    public function search(string $query): array
+    {
+        $query = trim($query);
+        if (!$query) {
+            return [];
+        }
+
+        $url = sprintf(
+            'https://packagist.org/search.json?q=%s',
+            $this->pluginConfiguration->getPackagistUrl(),
+            urlencode($query)
+        );
+
+        $results = file_get_contents($url);
+        if (false === $results) {
+            throw new \RuntimeException(sprintf('Fetching query from `%s` can not be processed right now.', $url));
+        }
+
+        return json_decode($results, true);
+    }
+}
+```
+
+Казалось бы, все хорошо, однако packagist может иметь зеркала и нам необходимо иметь возможность его конфигурировать.
+Давайте для этого создадим конфигурационный класс клагина, который будет отвечать за общие его настройки.
+Конфигурация приложения - это key/value хранилище, а значит мы можем определить ключ необходимого нам параметра для получения его значения.
+
+Итак, создаем новый класс в `src/Demo/DemoAppPluginConfiguration.php`
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Demo;
+
+use Micro\Framework\Kernel\Configuration\PluginConfiguration;
+
+class DemoAppPluginConfiguration extends PluginConfiguration
+{
+    public const CFG_PACKAGIST_URL = 'PACKAGIST_URL';
+
+    public function getPackagistUrl(): string
+    {
+        return rtrim($this->configuration->get(self::CFG_PACKAGIST_URL, 'https://packagist.org/'), '/');
+    }
+}
+```
+Сделующая задача - сделать доступным эту конфигурацию в нашем плагине.
+Для этого мы имплементируем в плагин `Micro\Framework\Kernel\Plugin\ConfigurableInterface` и чтобы каждый раз не писать рутинные методы `setConfiguration`, `configuration()`, просто добавим трейт `Micro\Framework\Kernel\Plugin\PluginConfigurationTrait`.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Demo;
+use Micro\Framework\Kernel\Plugin\ConfigurableInterface;
+use Micro\Framework\Kernel\Plugin\PluginConfigurationTrait;
+
+/**
+ * @method DemoAppPluginConfiguration configuration()
+ */
+class DemoAppPlugin implements ConfigurableInterface
+{
+    use PluginConfigurationTrait;
+}
+```
+
+###### Обратите внимание, чтобы конфигурационный класс плагина нашелся корректно, он должен иметь имя `{PluginClassName}Configuration`
+###### Аннотация `@method` имеет исключительно вспомогательную функцию для IDE. 
+
+Когда конфигурация определена, мы можем предоставить ее в сервис поиска `PackagistSearch`
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Demo\Business\Packagist;
+
+use App\Demo\DemoAppPluginConfiguration;
+
+readonly class PackagistSearch implements PackagistSearchInterface
+{
+    public function __construct(
+        private DemoAppPluginConfiguration $pluginConfiguration
     ) {
     }
 
@@ -129,12 +240,12 @@ readonly class PackagistSearch implements PackagistSearchInterface
         $url = sprintf(
             '%s/search.json?q=%s',
             $this->pluginConfiguration->getPackagistUrl(),
-            $query
+            urlencode($query)
         );
 
         $results = file_get_contents($url);
         if (false === $results) {
-            throw new \RuntimeException(sprintf('Fetch query can not be processed right now `%s`', $url));
+            throw new \RuntimeException(sprintf('Fetching query from `%s` can not be processed right now.', $url));
         }
 
         return json_decode($results, true);
@@ -142,156 +253,131 @@ readonly class PackagistSearch implements PackagistSearchInterface
 }
 ```
 
-Наш сервис поиска готов. Внутри он реализован достаточно просто и вполне подойдет для демонстрации работы нашего приложения.
-Однако, этого мало.
-Теперь сервис нужно передавать в фасад, чтобы в дальнейшем его можно было передать в DI.
+## Фасады - Контракт работы с бизнес-слоем.
+Мы не хотим предоставлять все классы в сервис-контейнер. Важно иметь контроль над тем, что мы регистрируем в качестве сервиса, однако важно, чтобы сторонние сервисы, которые используют наш фасад могли работать с заранее определенным контрактом. 
+Для этого к нам приходит на помощь такой паттерн проектирования как Фасад. 
+Фасады нужны для того, чтобы агрегировать и определить контракт работы с бизнес-логикой плагина и последующей регистрации его в DI.
 
-Давайте же создадим фасад нашего сервиса Packagist.
-Создадим новый класс в каталоге `src/Business/Packagist/Facade/PackagistFacade.php` и наполним его следующим содеримым.
+Давайте создадим наш первый фасад - `src/Demo/Facade/DemoAppFacadeInterface.php`
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Business\Packagist\Facade;
+namespace App\Demo\Facade;
 
-use App\Shared\Packagist\PackagistFacadeInterface;
-use App\Shared\Packagist\Search\PackagistSearchInterface;
+use App\Demo\Business\Packagist\PackagistSearchInterface;
 
-readonly class PackagistFacade implements PackagistFacadeInterface
+interface DemoAppFacadeInterface extends PackagistSearchInterface
 {
-    public function __construct(
-        private PackagistSearchInterface $packageReceiver
-    ) {
+}
+```
+
+Обратите внимание, данный фасад наследуется от `App\Demo\Business\Packagist\PackagistSearchInterface`, однако он может наследовать множесто внутренних интерфейсов. Это позволяет предоставить единую точку входа к функционалу плагина, при этом иметь четкое понимание того, какие задачи он сопосбен решать.
+И теперь давайте сделаем реализацию данного контракта `src/Demo/Facade/DemoAppFacade.php`
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Demo\Facade;
+
+use App\Demo\Business\Packagist\PackagistSearchInterface;
+
+readonly class DemoAppFacade implements DemoAppFacadeInterface
+{
+    public function __construct(private PackagistSearchInterface $packagistSearch)
+    {
     }
-    
+
     public function search(string $query): array
     {
-        return $this->packageReceiver->search($query);
+        return $this->packagistSearch->search($query);
     }
 }
 ```
 
-Обратите внимание, в качестве аргумента конструктора мы передали реализацию сервиса `PackagistSearchInterface`.
-Наш бизнес-слой готов, но все еще недоступен из DI/IoC контейнера.
-
-### Предоставление сервиса в контейнер.
-
-Для этого мы напишем плагин, который будет предоставлять данный фасад в контейнер.
-Создадим новый класс в `src/Business/Packagist/PackagistBusinessPlugin.php`
-
+## Регистрация сервиса в DI
+Разумеется, мало написать сервис. Нужно предоставить его в сервисный контейнер.
+Давайте немного расширим наш плагин.
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Business\Packagist;
+namespace App\Demo;
 
-use App\Business\Packagist\Facade\PackagistFacade;
-use App\Business\Packagist\Search\PackagistSearch;
-use App\Shared\Packagist\PackagistFacadeInterface;
-use App\Shared\Packagist\Search\PackagistSearchInterface;
+use App\Demo\Business\Packagist\PackagistSearch;
+use App\Demo\Business\Packagist\PackagistSearchInterface;
+use App\Demo\Facade\DemoAppFacade;
+use App\Demo\Facade\DemoAppFacadeInterface;
 use Micro\Component\DependencyInjection\Container;
 use Micro\Framework\Kernel\Plugin\ConfigurableInterface;
 use Micro\Framework\Kernel\Plugin\DependencyProviderInterface;
 use Micro\Framework\Kernel\Plugin\PluginConfigurationTrait;
 
 /**
- * @method PackagistBusinessPluginConfiguration configuration()
+ * @method DemoAppPluginConfiguration configuration()
  */
-class PackagistBusinessPlugin implements DependencyProviderInterface, ConfigurableInterface
+class DemoAppPlugin implements DependencyProviderInterface, ConfigurableInterface
 {
     use PluginConfigurationTrait;
 
     public function provideDependencies(Container $container): void
     {
-        $container->register(PackagistFacadeInterface::class, function () {
-            return $this->createFacade();
-        });
+        $container->register(DemoAppFacadeInterface::class, fn () => $this->createFacade());
     }
-
-    protected function createFacade(): PackagistFacadeInterface
+    
+    protected function createFacade(): DemoAppFacadeInterface
     {
-        return new PackagistFacade($this->createPackagistReceiver());
+        return new DemoAppFacade($this->createPackagistSearchService());
     }
 
-    protected function createPackagistReceiver(): PackagistSearchInterface
+    protected function createPackagistSearchService(): PackagistSearchInterface
     {
         return new PackagistSearch($this->configuration());
     }
 }
 ```
 
-Давайте подробнее рассмотрим этот класс, а особенно обратим внимание на его интерфейсы.
-  * `Micro\Framework\Kernel\Plugin\DependencyProviderInterface` - интерфейс сообщает, что плагину нужен Di\IoC контейнер. 
-  * `Micro\Framework\Kernel\Plugin\ConfigurableInterface` - интерфейс сообщает о том, что плагин имеет конфигурацию.
-    Обратите внимание на аннотацию `@method`. Она здесь необходима для удобства и указывает какой объект конфигурации вернет метод `configuration()`.
+Что у нас получилось - мы создали и зарегистрировали в контейнере сервис с контрактом `App\Demo\Facade\DemoAppFacadeInterface`.
+Давайте попробуем пообщаться с нашим сервисом.
 
-Т.к. мы делем запрос на удаленный URL, его нам необходимо предоставить.
-Давайте напишем класс, в котором мы определим все необходимые параметры для работы плагина.
+## Cli интерфейс.
 
+Здесь все будет предельно просто. Мы просто возьмем и создадим класс CLI I/O (Input/Output) и в зависимости от переданных параметров через консольную строку будем выдавать ответ в нужном формате.
+Для этого создадим новый класс `src/Demo/Communication/Command/PackagistSearchCommand.php`
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Business\Packagist;
+/**
+ * This file is part of the Micro framework package.
+ *
+ * (c) Stanislau Komar <head.trackingsoft@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use Micro\Framework\Kernel\Configuration\PluginConfiguration;
+namespace App\Demo\Communication\Command;
 
-class PackagistBusinessPluginConfiguration extends PluginConfiguration
-{
-    public const CFG_PACKAGIST_URL = 'PACKAGIST_URL';
-
-    public function getPackagistUrl(): string
-    {
-        return rtrim($this->configuration->get(self::CFG_PACKAGIST_URL, 'https://packagist.org/'), '/');
-    }
-}
-```
-Мы не будем останавливаться сейчас на том, что такое `PluginConfiguration`, какие у него есть свойства и как можно манипулировать конфигами.
-Подробнее об этом можно узнать в [здесь](/docs/plugins/micro/kernel-boot-configuration).
-
-## Коммуникационный слой - CLI
-
-Для начала нам необходимо создать плагин, который бы выполнял роль подключения комманд к CLI интерфейсу.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Communication\Packagist;
-
-
-class PackagistCommunicationPlugin
-{
-}
-```
-
-В дальнейшем мы вернемся к нему, а пока проследуем дальше.
-
-Сейчас давайте имплементируем нашу команду, который будет отвечать за коммуникацию бизнес-слоя и CLI интерфейса.
-Для этого перейдем в каталог `src/Communication/Packagist/Command` и заполним класс `PackagistCommand` следующим содержимым.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Communication\Packagist\Command;
-
-use App\Shared\Packagist\PackagistFacadeInterface;
+use App\Demo\Facade\DemoAppFacadeInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PackagistCommand extends Command
+/**
+ * @author Stanislau Komar <head.trackingsoft@gmail.com>
+ */
+class PackagistSearchCommand extends Command
 {
-    public function __construct(private readonly PackagistFacadeInterface $packagistFacade)
+    public function __construct(private readonly DemoAppFacadeInterface $facade)
     {
         parent::__construct('packagist:search');
     }
@@ -304,7 +390,7 @@ class PackagistCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $query = $input->getArgument('q');
-        $queryResult = $this->packagistFacade->search($query);
+        $queryResult = $this->facade->search($query);
         $tableHeaders = [
             'name',
             'description',
@@ -331,110 +417,61 @@ class PackagistCommand extends Command
     }
 }
 ```
-###### Мы используем для работы с CLI компонет.[symfony/console](https://symfony.com/doc/current/components/console.html), который предоставляется в MF через компонент [micro/plugin-console](/docs/plugins/micro/plugin-console).
+В качестве рендера ответов в CLI мы решаем, что хватит такой информации как:
+ - имя пакета
+ - его описание
+ - количество "звезд" на гитхабе.
 
-## Почти готово.
+Сделано это для того, чтобы выводимая информация без труда поместилась на экран.
 
-Теперь нам осталось сообщить приложению о том, какие плагины необходимо загружать в приложение.
-Для этого в `etc/plugins.php` у нас содержится список классов, которые должны быть подключены в приложении.
-Однако, этот список может быть крайне большим и управлять им будет крайне сложно.
-Для этого мы позаботились о [механизме подключения зависимых плагинов](/docs/plugins/micro/kernel-boot-plugin-depended) и теперь можем не паковать список всех плагинов в одном месте.
-
-Давайте же займемся этим.
-С точки зрения обывателя, у нас должен быть модуль, который реализует полный цикл работы поиска в Packagist.
-Для этого у нас существует папка `Plugins`, где мы создадим мета-пакет, который будет подключать все необходимые нам плагины.
-Определим мета-плагин для коммуникации всех слоев логики плагина Packagist.
-Для этого создадим класс `Plugin/Packagist/PackagistPlugin.php`
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Plugin\Packagist;
-
-use App\Business\Packagist\PackagistBusinessPlugin;
-use App\Communication\Packagist\PackagistCommunicationPlugin;
-use App\View\Packagist\PackagistViewPlugin;
-use Micro\Framework\Kernel\Plugin\PluginDependedInterface;
-
-class PackagistPlugin implements PluginDependedInterface
-{
-    public function getDependedPlugins(): iterable
-    {
-        return [
-            PackagistBusinessPlugin::class,
-            PackagistCommunicationPlugin::class,
-        ];
-    }
-}
-```
-Таким образом мы описали зависимости нашего плагина и предоставили набор компонентов в ядро.
-###### Чуть позже мы еще сюда вернемся.
-
-И следующий плагин, который нам понадобится `AppPlugin` в `src/Plugin`.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Plugin;
-
-use App\Plugin\Packagist\PackagistPlugin;
-use App\View\Base\BaseViewPlugin;
-use Micro\Framework\Kernel\Plugin\PluginDependedInterface;
-
-class AppPlugin implements PluginDependedInterface
-{
-    public function getDependedPlugins(): iterable
-    {
-        return [
-            PackagistPlugin::class,
-        ];
-    }
-}
-```
-
-И давайте подключим этот плагин в систему через `etc/plugins.php`
-```php
-return [
-/// **** other plugins */
-    App\Plugin\AppPlugin::class
-];
-```
-
-## Проверим, что у нас получилось.
-Теперь наш плагин будет доступен из интерфейса командной строки.
-Для этого выполним следующую команду
+Давайте попробуем что у нас получислось. В корне проекта выполним команду:
 ```shell
-$ bin/console packagist:search micro/kernel
+$ bin/console packagist:search "micro kernel app"
 ```
 
-Если мы все сделали правильно, то увидим примерно следующее содержимое:
+Если мы используем docker окружение, то
 ```shell
-+-----------------------------------+---------------------------------------------------------------------------------+--------+
-| name                              | description                                                                     | favers |
-+-----------------------------------+---------------------------------------------------------------------------------+--------+
-| micro/kernel-boot-plugin-depended | Micro Framework: Kernel Boot loader - component to provide dependencies         | 1      |
-| micro/kernel-boot-dependency      | Micro Framework: Kernel Boot loader - component to provide dependencies         | 0      |
-| micro/kernel-boot-configuration   | Micro Framework: Kernel Boot loader - component to provide plugin configuration | 0      |
-| micro/kernel-app                  | Micro Framework: App Kernel component                                           | 2      |
-| micro/kernel                      |                                                                                 | 2      |
-+-----------------------------------+---------------------------------------------------------------------------------+--------+
+$ make micro c="packagist:search 'micro kernel app'"
 ```
 
-## HTTP Интерфейс.
-Для начала, давайте создадим контроллер `App\Communication\Packagist\Controller\PackagistSearchController`
+И получим примено похожие результаты
+```
++-----------------------------+---------------------------------------------+--------+
+| name                        | description                                 | favers |
++-----------------------------+---------------------------------------------+--------+
+| micro/kernel-app            | Micro Framework: App Kernel component       | 2      |
+| symlex/di-microkernel       | Micro-Kernel for PHP Applications           | 6      |
+| phonetworks/pho-microkernel | Social-Enabled App Infrastructure           | 23     |
+| lastzero/di-microkernel     | Micro-Kernel for PHP Applications           | 6      |
+| jmleroux/symfony-micro-rest | Symfony micro kernel application for rest   | 1      |
+| lou117/wake                 | Web-Application KErnel, PHP micro-framework | 0      |
++-----------------------------+---------------------------------------------+--------+
+
+```
+
+Это может свидетельствует о том, что мы все делали правильно:
+  - В `PackagistSearchCommand` была внедрена зависимость нашего бизнес-слоя
+  - Сервис `DemoAppFacadeInterface` независимо от I/O способен выдавать необходимый результат для дальнейшего его представления во View.
+
+## HTTP
+Давайте отобразим наши данные в браузере.
+Чтобы сделать это в красивом виде, мы будем использовать
+ - В качестве шаблонизатора [Twig](https://twig.symfony.com/).
+ - Для стилизации мы будем использовать [Bootstrap](https://getbootstrap.com/)
+ - Чтобы связать стили и JS мы будем использовать уже предустановленный плагин [micro/plugin-twig-webpack-encore](https://micro-php.net/docs/plugins/micro/plugin-twig-webpack-encore).
+ - Чтобы выполнять сборку frontend - нам понадобится nodejs и менеджер зависимостей (yarn/npm) последних версий.** Но об этом мы расскажем немного позже.
+
+Давайте приступим к созданию контроллера.
+Расположим его в `src/Demo/Communication/Controller/PackagistSearchController.php`
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Communication\Packagist\Controller;
+namespace App\Demo\Communication\Controller;
 
-use App\Shared\Packagist\PackagistFacadeInterface;
+use App\Demo\Facade\DemoAppFacadeInterface;
 use Micro\Plugin\Twig\TwigFacadeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -442,111 +479,162 @@ use Symfony\Component\HttpFoundation\Response;
 readonly class PackagistSearchController
 {
     public function __construct(
-        private PackagistFacadeInterface $packagistFacade,
+        private DemoAppFacadeInterface $packagistFacade,
         private TwigFacadeInterface $twigFacade
     ) {
     }
 
-    public function index(Request $request): Response
+    public function search(Request $request): Response
     {
         $query = (string) $request->get('q');
-        $results = $this->packagistFacade->search($query);
+        $exception = null;
+        $results = null;
+        try {
+            $results = $this->packagistFacade->search($query);
+        } catch (\RuntimeException $exception) {
+        }
 
-        $rendered = $this->twigFacade->render('@Packagist/home.html.twig', [
+        $rendered = $this->twigFacade->render('@DemoAppPlugin/Packagist/search.html.twig', [
             'query' => $query,
             'results' => $results,
+            'exception' => $exception,
         ]);
 
         return new Response($rendered);
     }
 }
 ```
-###### Как в конструктор, так и в метод контроллера можно передавать необходимые зависимости из DI автоматически.
 
-И теперь давайте вернемся в класс `App\Communication\Packagist\PackagistCommunicationPlugin`
-И немного его модифицируем.
+Обратите внимание, в контроллере нам требуются сервисы `App\Demo\Facade\DemoAppFacadeInterface` у которого есть одна задача - генерировать из Twig шаблона контент, в нашем случае, HTML для жальнейшей передачи его в `Response`, а так же, как вы уже узнали, сервис нашего бизнес-слоя `DemoAppFacadeInterface`.
+Осталось сообщить ядру то, что наш плагин является еще и провайдером маршрутов и шаблонов Twig.
+Для этого вернемся в код нашего плагина `src/Demo/DemoAppPlugin.php` и имплементируем в него интерфейсы
+  - `Micro\Plugin\Twig\Plugin\TwigTemplatePluginInterface` - контракт, сообщающий о том, откуда и с каким неймспейсом забирать шаблоны.
+  - `Micro\Plugin\Http\Plugin\RouteProviderPluginInterface` - контракт предоставления маршрутов плагина.
+
+Давайте добавим в наш плагин эту функциональность.
+
 ```php
 <?php
 
 declare(strict_types=1);
 
-namespace App\Communication\Packagist;
+namespace App\Demo;
 
-use App\Communication\Packagist\Controller\PackagistSearchController;
+use App\Demo\Business\Packagist\PackagistSearch;
+use App\Demo\Business\Packagist\PackagistSearchInterface;
+use App\Demo\Communication\Controller\PackagistSearchController;
+use App\Demo\Facade\DemoAppFacade;
+use App\Demo\Facade\DemoAppFacadeInterface;
+use Micro\Component\DependencyInjection\Container;
+use Micro\Framework\Kernel\Plugin\ConfigurableInterface;
+use Micro\Framework\Kernel\Plugin\DependencyProviderInterface;
+use Micro\Framework\Kernel\Plugin\PluginConfigurationTrait;
 use Micro\Plugin\Http\Facade\HttpFacadeInterface;
 use Micro\Plugin\Http\Plugin\RouteProviderPluginInterface;
+use Micro\Plugin\Twig\Plugin\TwigTemplatePluginInterface;
+use Micro\Plugin\Twig\Plugin\TwigTemplatePluginTrait;
 
-class PackagistCommunicationPlugin implements RouteProviderPluginInterface
+/**
+ * @method DemoAppPluginConfiguration configuration()
+ */
+class DemoAppPlugin implements DependencyProviderInterface, TwigTemplatePluginInterface, ConfigurableInterface, RouteProviderPluginInterface
 {
+    use PluginConfigurationTrait;
+    use TwigTemplatePluginTrait;
+
+    public function provideDependencies(Container $container): void
+    {
+        $container->register(DemoAppFacadeInterface::class, fn () => $this->createFacade());
+    }
+
+    protected function createFacade(): DemoAppFacadeInterface
+    {
+        return new DemoAppFacade($this->createPackagistSearchService());
+    }
+
+    protected function createPackagistSearchService(): PackagistSearchInterface
+    {
+        return new PackagistSearch($this->configuration());
+    }
+
     public function provideRoutes(HttpFacadeInterface $httpFacade): iterable
     {
-        yield $httpFacade
-            ->createRouteBuilder()
-            ->setController([PackagistSearchController::class, 'index'])
+        yield $httpFacade->createRouteBuilder()
             ->setUri('/')
-            ->setName('home')
-            ->build();
+            ->setController(PackagistSearchController::class)
+            ->setName('search')
+            ->build()
+        ;
     }
 }
 ```
 
-Мы имплементировали в класс интерфейс `Micro\Plugin\Http\Plugin\RouteProviderPluginInterface` и теперь компонент [micro/plugin-http-core](/docs/plugins/micro/plugin-http-core) знает о том, что 6этот плагин является провайдером маршрутов нашего приложения.
-###### Это один из доступных вариантов определения маршрутизации. Подробнее обо всех возможностях читайте в [документации](/docs/plugins/micro/plugin-http-core).
+Здесь стоит обратить внимание на метод `provideRoutes`. ОДнако, думаю, в излишних комментариях он не нуждается.
+А вот трейт `Micro\Plugin\Twig\Plugin\TwigTemplatePluginTrait` реализует сразу 2 метода:
+  - `TwigTemplatePluginTrait::getTwigTemplatePaths()` - указывает массив с адресами каталогов где нужно искать шаблоны. По умолчанию это `<PLUGIN ROOT DIR>/templates`
+  - `TwigTemplatePluginTrait::getTwigNamespace` - Указывает на неймспейс. По умолчанию это shortName класса плагина.
 
-И давайте попробуем посмотреть что получилось.
-Для этого перейдем в папку `public/` и выполним `$ php -s localhost:8000`, после чего перейдем в браузер и увидим красиво оформленную в Symfony-style страницу с информацией об ошибке.
+### Шаблоны
+Мы не будем останавливаться в данной статье на работе шаблонизатора, лучше всего об этом расскажет [официальная документация](https://twig.symfony.com/doc/3.x/).
+Но мы [подгтовили для вас готоые шаблоны](https://github.com/Asisyas/microframework-packagist-demo/tree/master/src/Demo/templates), чтобы вы смогли использовать их для демонстрационных целей.
+Просто разместите их в каталог `src/Demo/templates/`
+А [frontend часть]((https://github.com/Asisyas/microframework-packagist-demo/tree/master/assets)) разместите в `assets/`
 
+### Давайте соберем наш фронт
+Для того, чтобы html контент выглядел презентаельно, вышеупомянутые шаблоны подготовлены для работы с CSS фреймворком [Bootstrap](https://getbootstrap.com/)
+И мы пришли к необходимости установки NodeJS.
+
+###### Если вы используете docker, вы можете добавить в `docker-compose.override.yml` подходящий для этого контейнер, либо установить nodejs локально.
+Oдин из вариантов добавления nodejs в `docker-compose.yml`. После чего, самый простой вариант установки нужного контейрера `make down && make up`
+```yaml
+services:
+# other services
+    node:
+        image: node:lts
+        working_dir: /app
+        volumes:
+          - - ./:/app
 ```
-    There are no registered paths for namespace "Packagist".
+###### Если вы не используете Docker, то можете просто использовать интерфейс командной строки для работы.
+```shell
+$ yarn install
+```
+Давайте установим Bootstrap и требуемый для него jQuery.
+
+```shell
+$ yarn add bootstrap jquery
+# or
+$ npm i bootstrap jqeury --save
+```
+После чего давайте запустим сборку
+
+```shell
+yarn build
+```
+## Завершение
+Давайте проверим то, как работает наше приложение
+
+###### Если мы используем Docker
+Если наше приложение не запущено, то давайте стартуем его
+
+```shell
+$ make up
 ```
 
-Она возникла из-за того, что мы не подключили слой *View* приложения.
-Давайте исправим это.
-Перейдем в папку `src/View/Packagist` и создадим там плагин `PackagistViewPlugin`.
+Откроем в браузере [https://localhost](https://localhost)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\View\Packagist;
-
-use Micro\Plugin\Twig\Plugin\TwigTemplatePluginInterface;
-
-class PackagistViewPlugin implements TwigTemplatePluginInterface
-{
-    public function getTwigTemplatePaths(): array
-    {
-        return [
-            __DIR__.'/templates',
-        ];
-    }
-
-    public function getTwigNamespace(): ?string
-    {
-        return 'Packagist';
-    }
-
-    public function isTwigTemplatesPrepend(): bool
-    {
-        return true;
-    }
-}
+###### Если мы используем локальный php-cli
+```shell
+$ cd public
+$ php -S localhost:8000 
 ```
-
-Интерфейс `Micro\Plugin\Twig\Plugin\TwigTemplatePluginInterface` сооббщает компоненту [micro/plugin-twig] о том, что этот плагин предоставляет шаблоны в формате [Twig](https://twig.symfony.com/).
-Далее, в соответствующей папке ` __DIR__.'/templates'` мы можем реализовать необходимые нам шаблоны.
-Готовые шаблоны нашего приложения можно посмотреть [здесь](https://github.com/Asisyas/microframework-packagist-demo/tree/master/src/View).
-
-Когда мы закончили с `View`, подключим его плагин в `src/Plugin/PackagistPlugin.php` по аналогии с предыдущими.
-
-Если мы все сделали правильно, то в браузере увидим результат нашего труда :)
-
-### Заключение.
-Структура каталогов и взаимодействие плагинов в статье может не соответствовать в реальных проектах, адаптируйте ее под свои нужды.
-
-Исходный код проекта доступен на [GitHub](https://github.com/Asisyas/microframework-packagist-demo).
-
-Всем спасибо!
+Откроем в браузере [http://localhost:8000]
 
 
+### Поздравляю, мы собрали первое приложение на MicroPHP.
+Надеемся, данный пример раскрыл часть возмодностей MicroPHP и вам понравилось на нем работать.
+
+## Послесловие
+  * Исходный код готового приложения можно найти на [GitHub](https://github.com/Asisyas/microframework-packagist-demo)
+  * В демонстрационных целях мы показали как можно работать с интерфейсами компонентов MF, однако, мы придерживаемся правила, что каждый плагин должен выполнять только свою функцию: I/O, Business-Layer, View и т.д., однако, вам решать как обустраивать экосистему своего приложения.
+  * Спасибо, что используете нас. Это очень мотивирует делать продукт более удобным, качественным и придерживаться высоких стандартов в его разработке.
