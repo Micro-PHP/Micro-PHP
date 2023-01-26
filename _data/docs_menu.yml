@@ -1,20 +1,22 @@
 - label: GETTING STARTED
   items:
-    - name: Installation
+    - name: Установка
       link: /docs/getting-started/installation
-    - name: Docker environment
+    - name: Docker окружение
       link: /docs/getting-started/docker
+    - name: Создание первого приложения
+      link: /docs/getting-started/building-first-app
 - label: ARCHITECTURE
   items:
-    - name: Kernel
-      link: /docs/architecture/kernel
-    - name: DI/IoC
-      link: /docs/architecture/di
+#    - name: Kernel
+#      link: /docs/architecture/kernel
+#    - name: DI/IoC
+#      link: /docs/architecture/di
 #    - name: Http
 #      link: /docs/architecture/http
-#    - name: Plugins
-#      link: /docs/architecture/plugins
-- label: COMPONENTS
+    - name: Плагины
+      link: /docs/architecture/plugins
+- label: КОМПОНЕНТЫ
   items:
-    - name: Status list
+    - name: Список
       link: /docs/plugins/status
