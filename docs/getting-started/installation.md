@@ -1,18 +1,18 @@
 ---
 layout: doc/document
-title: Installation
+title: Установка
 show_sidebar: false
 menubar: docs_menu
 ---
 
-## Requirements
-The minimum PHP version must be at least **8.2**
+## Минимальные требования
+Минимальная версия PHP не ниже **8.2**
 
-## Get started
+## Установка
 
-It is recommended that you create your first application in a [docker environment](/docs/getting-started/docker).
+Рекомендовано использовать [docker environment](/docs/getting-started/docker). для установки, но это не обязательно.
 
-Or you can create an application via [composer](https://getcomposer.org/).
+Либо вы можете использовать [composer](https://getcomposer.org/).
 
 ```shell
 $ composer create-project micro/micro {directory} --remove-vcs
@@ -20,17 +20,23 @@ $ cd {directory}
 $ php -S localhost:10000 -t public/
 ```
 
-Open `http://localhost:10000` and you will see HelloWorld page.
+Откройте `http://localhost:10000` и вы увидите простой `hello world` ответ.
 
-There is also support for console utilities.
+А так же, у вас есть возможность использовать инструменты командной строки
 ```bash
 php bin/console
 ``` 
 
-## Running Tests
+## Запуск тестов
 
-To run tests, run the following command. By default, phpstan, psalm, phpunit will be runned.
+Тесты - неотъемлемая часть любого профессионального ПО.
+По умолчанию уже интегрированы `phpstan`, `psalm`, `phpunit`.
 
+Для запуска тестов выполните команду 
 ```bash
 $ composer run-script test-all
 ``` 
+
+## Что дальше ?
+Давайте попробуем [создать наше первое приложение](/docs/getting-started/building-first-app).
+
