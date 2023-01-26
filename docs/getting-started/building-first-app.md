@@ -11,29 +11,8 @@ menubar: docs_menu
 
 ## Установка
 
-Чтобы установить локальное рабочее окружение с проектом, можете воспользоваться заранее подготовленной Docker-конфигурацией, либо использовать .
+[Установите локальное рабочее окружение](/docs/getting-started/installation) с помощью composer, либо воспользуйтесь заранее подготовленной [конфигурацией Docker](/docs/getting-started/docker).
 
-#### Установка с помощью `composer`
-
-Для начала, давайте установим MF.
-Для этого воспользуемся [composer](https://composer.org)
-
-Обратите внимание, для запуска MF требуется минмальная версия php 8.2
-
-```shell
-$ composer create-project micro/skeleton Demo --remove-vcs
-```
-
-#### Установка с помощью `Docker`
-
-Убедитесь, что у вас установлена свежая версия [Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
-
-```shell
-$ git clone git@github.com:Micro-PHP/micro-docker.git App
-$ cd App
-$ rm -rf .git/
-$ git init
-$ make build && make up
 ```
 
 ##### После установки, нас особенно будут интересовать следующие каталоги и файлы
