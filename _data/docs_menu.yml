@@ -28,6 +28,8 @@
      link: /docs/plugins/micro/plugin-http-middleware
    - name: Обработка ошибок
      link: /docs/plugins/micro/plugin-http-exceptions
+   - name: Обработка ошибок (dev mode)
+     link: /docs/plugins/micro/plugin-http-exceptions-dev
 - label: КОМПОНЕНТЫ
   items:
     - name: Список
