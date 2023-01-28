@@ -22,6 +22,8 @@
      link: /docs/plugins/micro/plugin-http-core
    - name: Маршрутизация
      link: /docs/plugins/micro/plugin-http-router-code
+   - name: Middleware
+     link: /docs/plugins/micro/plugin-http-middleware
 - label: КОМПОНЕНТЫ
   items:
     - name: Список
