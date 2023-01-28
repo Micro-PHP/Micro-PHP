@@ -12,6 +12,8 @@ menubar: docs_menu
 
 ## Установка
 
+###### Компонент включен в состав [micro/plugin-http-pack](/docs/plugins/micro/plugin-http-pack).
+
 Для установки библиотеки воспользуйтесь [composer](https://composer.org)
 
 ```shell
