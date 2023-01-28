@@ -30,6 +30,8 @@
      link: /docs/plugins/micro/plugin-http-exceptions
    - name: Обработка ошибок (dev mode)
      link: /docs/plugins/micro/plugin-http-exceptions-dev
+   - name: Логирование
+     link: /docs/plugins/micro/plugin-http-logger
 - label: КОМПОНЕНТЫ
   items:
     - name: Список
