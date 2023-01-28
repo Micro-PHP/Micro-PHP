@@ -31,3 +31,8 @@ $ composer require micro/plugin-http-core
 
 ## Маршрутизация
 
+  *  [micro/plugin-http-router-code](/docs/plugins/micro/plugin-http-router-code)  Регистрация маршрутов на основе интерфейса плагина.
+
+
+
+
