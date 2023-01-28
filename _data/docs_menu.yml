@@ -16,6 +16,10 @@
 #      link: /docs/architecture/http
     - name: Плагины
       link: /docs/architecture/plugins
+- label: HTTP
+  items:
+   - name: Ядро
+     link: /docs/plugins/micro/plugin-http-core
 - label: КОМПОНЕНТЫ
   items:
     - name: Список
