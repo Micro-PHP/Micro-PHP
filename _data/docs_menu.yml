@@ -18,6 +18,8 @@
       link: /docs/architecture/plugins
 - label: HTTP
   items:
+   - name: Установка
+     link: /docs/plugins/micro/plugin-http-pack
    - name: Ядро
      link: /docs/plugins/micro/plugin-http-core
    - name: Маршрутизация
