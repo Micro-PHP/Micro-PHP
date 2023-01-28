@@ -54,7 +54,7 @@ class ApplicationRouterPlugin implements RouteProviderPluginInterface
 
     yield $builder
       ->setName('hello')
-      ->setController(fn(Request $request) => new Response('Hello, ' . $request->get('recipient_name'))) // If the method is not set, the route name is used by default
+      ->setController(fn(Request $request) => new Response('Hello, ' . $request->get('recipient_name'))) // Callback as controller
       ->setUri('/hello/{recipient_name}')
       ->build();
   }
