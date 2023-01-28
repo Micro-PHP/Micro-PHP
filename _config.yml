@@ -1,6 +1,7 @@
 #theme: bulma-clean-theme
 remote_theme: chrisrhymes/bulma-clean-theme
 github: [metadata]
+google_analytics: G-ZWTH7CLMHR
 packages_official:
   -
     name: kernel
