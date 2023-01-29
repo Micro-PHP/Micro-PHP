@@ -19,9 +19,9 @@
 - label: ЛОГИРОВАНИЕ
   items:
     - name: Ядро
-      link: /docs/plugin/micro/plugin-logger-core
+      link: /docs/plugins/micro/plugin-logger-core
     - name: Адаптер Monolog
-      link: /docs/plugin/micro/plugin-logger-monolog
+      link: /docs/plugins/micro/plugin-logger-monolog
 - label: Cli
   items:
     - name: Интерфейс cli
