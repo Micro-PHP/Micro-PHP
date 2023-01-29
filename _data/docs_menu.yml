@@ -16,6 +16,11 @@
 #      link: /docs/architecture/http
     - name: Плагины
       link: /docs/architecture/plugins
+      
+- label: Базы данных
+  items:
+    - name: ORM Doctrine
+      link: /docs/plugins/micro/plugin-doctrine
 - label: ЛОГИРОВАНИЕ
   items:
     - name: Ядро
