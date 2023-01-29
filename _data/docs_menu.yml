@@ -16,6 +16,10 @@
 #      link: /docs/architecture/http
     - name: Плагины
       link: /docs/architecture/plugins
+- label: Cli
+  items:
+    - name: Интерфейс cli
+      link: /docs/plugins/micro/plugin-console
 - label: HTTP
   items:
    - name: Установка
