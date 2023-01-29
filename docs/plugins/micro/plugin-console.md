@@ -23,6 +23,7 @@ $ composer require micro/plugin-console
 ## Использование
 
 Для того, чтобы зарегистрировать команду, просто создайте класс, наследуемый от `Symfony\Component\Console\Command\Command`.
+Предоставление зависимостей доступно с помощью Denendency Injection через конструктор класса.
 
 ```php
 <?php
@@ -35,10 +36,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @author Stanislau Komar <head.trackingsoft@gmail.com>
- */
-class TestCounterCommand extends Command
+class AppExampleCommand extends Command
 {
     public function __construct(
         private readonly ExampleServiceFacadeInterface $exampleFacade
