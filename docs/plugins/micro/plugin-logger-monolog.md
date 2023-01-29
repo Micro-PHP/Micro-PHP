@@ -7,7 +7,7 @@ menubar: docs_menu
 
 ## Компонент Logger Monolog
 
-Адаптер для [micro/plugin-logger-core], который предоставляет возможность использования [Monolog](https://seldaek.github.io/monolog/)
+Адаптер для [micro/plugin-logger-core](/docs/plugins/micro/plugin-logger-core), который предоставляет возможность использования [Monolog](https://seldaek.github.io/monolog/)
 
 ## Установка
 
