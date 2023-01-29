@@ -23,9 +23,9 @@ $ composer require micro/plugin-logger-core
 ## Концигурация
 
   * `LOGGER_{logger name}_LOG_LEVEL` - уровень логирования.
-  * `LOGGER_{logger name}_PROVIDER_TYPE` - имя провайдера. 
+  * `LOGGER_{logger name}_PROVIDER_TYPE` - имя адаптера. 
 
-## Провайдеры
+## Адаптеры
 
   * [micro/plugin-logger-monolog](/docs/plugins/micro/plugin-logger-monolog)
 
