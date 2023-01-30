@@ -5,6 +5,9 @@ subtitle: "Lightweight PHP frameworkd for all !"
 callouts: homepage_callouts
 ---
 
-{:refdef: style="text-align: center;"}
-[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/)
-{: refdef}
+<div align="center">
+  <h2> Supported By JetBrains </h2>
+  <a href="https://jetbrains.com" target="_blank">
+    <img alt="JetBrains" src="/assets/jb_beam.svg" />
+  </a>
+</div>
