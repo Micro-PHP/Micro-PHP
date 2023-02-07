@@ -80,8 +80,8 @@ packages_official:
 #    name:  plugin-dto
 #    github: plugin-dto
 #  -
-#    name:  plugin-elastic
-#    github: plugin-elastic
+    name:  plugin-elastic
+    github: plugin-elastic
   -
     name:  plugin-event-emitter
     github: plugin-event-emitter
