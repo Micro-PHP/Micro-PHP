@@ -21,10 +21,10 @@ menubar: docs_menu
 
 interface ExecutorPluginInterface
 {
-    public function execute(string $adapterName = null): void;
+    public function execute(): void;
 }
 
-interface AdapterPluginInterface 
+interface AdapterPluginInterface
 {
     public function getName(): string;
     public function execute(): void;
@@ -85,20 +85,10 @@ class AdapterExecutor implements DependencyProviderInterface, ExecutorPluginInte
         });
     }
     
-    public function execute(string $adapterName = null): void
+    public function execute(): void
     {
-        $executed = false;
         foreach ($this->kernel->plugins(AdapterPluginInterface::class) as $plugin) {
-            if ($adapterName !== null && $adapterName !== $plugin->getName()) {
-                continue;
-            }
-            
-            $executed = true;
             $plugin->execute();
-        }
-        
-        if(!$executed) {
-            throw new \RuntimeException(sprintf('Failed to perform "%s" action.', $adapterName));
         }
     }
 }
