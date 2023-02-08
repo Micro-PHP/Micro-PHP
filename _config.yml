@@ -76,10 +76,10 @@ packages_official:
   -
     name:  plugin-doctrine
     github: plugin-doctrine
-#  -
-#    name:  plugin-dto
-#    github: plugin-dto
-#  -
+  -
+    name:  plugin-dto
+    github: plugin-dto
+  -
     name:  plugin-elastic
     github: plugin-elastic
   -
