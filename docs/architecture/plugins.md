@@ -95,7 +95,7 @@ class AdapterExecutor implements DependencyProviderInterface, ExecutorPluginInte
 ```
 
 После чего нам необходимо будет зарегистрировать плагины в ядре и запустить приложение.
-Если вы используете [micro/skeleton](/docs/getting-started/installation), то просто добавьте string-class в `etc/plugins.php`
+Если вы используете [micro/micro](/docs/getting-started/installation), то просто добавьте string-class в `etc/plugins.php`
   * `AdapterExecutor::class`
   * `AdvancedAdapterPlugin::class`
   * `DefaultAdapterPlugin::class`
