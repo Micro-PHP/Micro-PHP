@@ -15,9 +15,9 @@ packages_official:
   -
     name: dependency-injection
     github: lib-dependency-injection
-#  -
-#    name: deprecation-supports
-#    github: deprecation-supports
+  -
+    name: plugin-cache
+    github: plugin-cache
   -
     name: kernel-boot-configuration
     github: kernel-bootloader-configuration
