@@ -19,6 +19,9 @@ packages_official:
     name: plugin-cache
     github: plugin-cache
   -
+    name: plugin-redis
+    github: plugin-redis
+  -
     name: kernel-boot-configuration
     github: kernel-bootloader-configuration
   -
