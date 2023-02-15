@@ -97,6 +97,9 @@ packages_official:
   -
     name:  plugin-filesystem-s3
     github: plugin-filesystem-s3
+  -
+    name:  dto
+    github: dto
 #  -
 #    name:  plugin-uuid
 #    github: plugin-uuid
